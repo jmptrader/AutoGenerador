@@ -62,7 +62,7 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-                                propiedades += string.Format("Private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
+                                propiedades += string.Format("private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
                                 metodos += string.Format("public bool {0} {{ {1} get {{return m_{2};}} {3} set {{m_{4} = value;}} }}", dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
                             }
                         }
