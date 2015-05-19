@@ -32,16 +32,24 @@ namespace AutoGenerador
         private void simpleButton1_Click(object sender, EventArgs e)
         {
             StringBuilder archivo = new StringBuilder();
-            string propiedades = "";
-            string metodos = "";
+            string propiedades;
+            string metodos;
 
-            if (checkEdit1.Checked)
+            bool exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Entidades\\");
+            if (!exists)
+                System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Entidades\\");
+
+            
+            DataTable datTablas = cargarEsquemaBD();
+            if (datTablas != null)
             {
-                DataTable datTablas = cargarEsquemaBD();
-                if (datTablas != null)
+                foreach (DataRow dr in datTablas.Rows)
                 {
-                    foreach (DataRow dr in datTablas.Rows)
+                    if (checkEdit1.Checked)
                     {
+                        propiedades = "";
+                        metodos = "";
+
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\Entidad.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
                         reader.Close();
@@ -54,20 +62,17 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-                                propiedades += string.Format("Private {0}_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(),Environment.NewLine);
-                                metodos += string.Format("public bool {0} {",dc.ColumnName);
-
-        
-        //    get{
-        //        return m_despachado;
-        //    }
-        //    set{
-        //        m_despachado = value;
-        //    }
-        //}
-
+                                propiedades += string.Format("Private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
+                                metodos += string.Format("public bool {0} {{ {1} get {{return m_{2};}} {3} set {{m_{4} = value;}} }}", dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
                             }
                         }
+
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+                        archivo.Replace("[METODOS]", metodos);
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}cls{2}.cs", buttonEdit1.Text, "Entidades\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
                     }
                 }
             }
