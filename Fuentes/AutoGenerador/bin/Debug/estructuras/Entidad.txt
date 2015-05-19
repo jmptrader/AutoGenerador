@@ -1,0 +1,38 @@
+///////////////////////////////////////////////////////////
+//  cls[TABLE].cs
+//  Implementation of the Class cls[TABLE]
+//  SAF - Integral Solutions SAS
+//  Created on:      05-abr-2013 04:12:44 p.m.
+//  Original author: kenchic
+///////////////////////////////////////////////////////////
+
+using SAFCore;
+
+namespace SAFCore {
+	public class cls[TABLE] {
+
+		#region Propiedades
+		[PROPIEDADES]
+       		#endregion 
+		
+		#region Construtores
+		public cls[TABLE](){
+
+		}
+
+		~cls[TABLE](){
+
+		}
+
+		public override void Dispose(bool disposing){
+
+		}
+		#endregion 
+		
+		#region Metodos
+		[METODOS]
+		#endregion 
+
+	}//end cls[TABLE]
+
+}//end namespace SAFCore
