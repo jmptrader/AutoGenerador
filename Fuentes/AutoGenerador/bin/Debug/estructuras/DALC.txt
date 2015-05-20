@@ -1,0 +1,75 @@
+///////////////////////////////////////////////////////////
+//  cls[TABLE]DALC.cs
+//  Implementation of the Class DALC [TABLE]
+//  SAF - Integral Solutions SAS
+//  Created on:      05-abr-2013 12:08:31 p.m.
+//  Original author: German Alvarez
+///////////////////////////////////////////////////////////
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+using BaseDatos;
+
+namespace SAFCore {
+
+    public partial class cls[TABLE]DALC
+    {
+    
+        public void Dispose()
+        {            
+            GC.SuppressFinalize(this);
+        }
+	/// 
+        /// 
+        public cls[TABLE] datatableConsultar()
+        {
+            DataTable datos = new DataTable();
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            return fab.CrearObjeto(datos);
+        }
+
+        /// 
+        /// 
+        public List<cls[TABLE]> listConsultar()
+        {
+            DataTable datos = new DataTable();
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            return fab.CrearObjetos(datos);
+        }
+
+	/// 
+        /// 
+        public DataTable datatableConsultar()
+        {
+            DataTable datos = new DataTable();
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            return datos;
+        }	
+
+	/// 
+	/// <param name="obj"></param>
+        public int Editar(cls[TABLE] obj)
+        {
+            int resultado;
+
+        }
+		/// 
+		/// <param name="obj"></param>
+        public int Eliminar(cls[TABLE] obj)
+        {
+            int resultado;
+        }
+
+		/// 
+		/// <param name="obj"></param>
+        public int Insertar(cls[TABLE] obj)
+        {
+            int resultado;
+        
+	}
+
+   }//end DALC
+
+}//end namespace SAFCore

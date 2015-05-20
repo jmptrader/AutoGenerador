@@ -3,10 +3,11 @@
 //  Implementation of the Class cls[TABLE]
 //  SAF - Integral Solutions SAS
 //  Created on:      05-abr-2013 04:12:44 p.m.
-//  Original author: kenchic
+//  Original author: German Alvarez
 ///////////////////////////////////////////////////////////
 
 using SAFCore;
+using System;
 
 namespace SAFCore {
 	public class cls[TABLE] {
@@ -24,7 +25,7 @@ namespace SAFCore {
 
 		}
 
-		public override void Dispose(bool disposing){
+		public void Dispose(bool disposing){
 
 		}
 		#endregion 

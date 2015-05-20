@@ -1,4 +1,10 @@
-
+///////////////////////////////////////////////////////////
+//  clsFabrica[TABLE].cs
+//  Implementation of the Class cls[TABLE]
+//  SAF - Integral Solutions SAS
+//  Created on:      05-abr-2013 04:12:44 p.m.
+//  Original author: German Alvarez
+///////////////////////////////////////////////////////////
 using System;
 using System.Collections.Generic;
 
@@ -21,7 +27,7 @@ namespace SAFCore
 		}
 
 		
-		public List<cls[TABLE]> CrearObjetosLIST(System.Data.DataTable tabla){
+		public List<cls[TABLE]> CrearObjetos(System.Data.DataTable tabla){
 		    var lista = new List<cls[TABLE]>();
             foreach (System.Data.DataRow fila in tabla.Rows)
             {
@@ -30,6 +36,15 @@ namespace SAFCore
                 lista.Add(obj);
             }
             return lista;
+		}
+
+public cls[TABLE] CrearObjeto(System.Data.DataTable tabla){
+		    cls[TABLE] obj = new cls[TABLE]();
+            System.Data.DataRow fila =  tabla.Rows[0];
+            {                
+                [PROPIEDADES]
+            }
+            return obj;
 		}
     }
 }
