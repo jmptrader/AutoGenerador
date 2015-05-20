@@ -39,6 +39,10 @@ namespace AutoGenerador
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Entidades\\");
 
+
+            exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Fabricas\\");
+            if (!exists)
+                System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Fabricas\\");
             
             DataTable datTablas = cargarEsquemaBD();
             if (datTablas != null)
@@ -57,7 +61,7 @@ namespace AutoGenerador
                         string NombreTabla = dr[2].ToString();
                         DataTable datCampos = cargarEsquemaTabla(NombreTabla);
 
-                        archivo.Replace("[TABLE]", "cls" + NombreTabla.Substring(2));
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         if (datCampos != null)
                         {
                             foreach (DataColumn dc in datCampos.Columns)
@@ -74,7 +78,55 @@ namespace AutoGenerador
                         writer.Write(archivo.ToString());
                         writer.Close();
                     }
+
+                    if (checkEdit4.Checked)
+                    {
+                        propiedades = "";
+                        
+
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\Fabrica.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        DataTable datCampos = cargarEsquemaTabla(NombreTabla);
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        if (datCampos != null)
+                        {
+                            foreach (DataColumn dc in datCampos.Columns)
+                            {
+                                switch (dc.DataType.Name)
+                                {
+                                    case "Int16":
+                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                        break;
+                                    case "Int32":
+                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                        break;
+                                    case "Int64":
+                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                        break;
+                                    case "String":
+                                        propiedades += string.Format("obj.{0} = fila[\"{1}\"].ToString();{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                        break;
+                                    case "Boolean":
+                                        propiedades += string.Format("obj.{0} = Convert.ToBoolean(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                        break;
+                                        
+                                }
+                            }
+                        }
+
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+                      
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}clsFabrica{2}.cs", buttonEdit1.Text, "Fabricas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                    }
                 }
+                MessageBox.Show("Finalizo");
             }
         }
 
@@ -89,7 +141,7 @@ namespace AutoGenerador
                 tabla = conexion.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
                 return tabla;
             }
-            catch (Exception ex)
+            catch (Exception)
             { }
             finally
             {
@@ -116,7 +168,7 @@ namespace AutoGenerador
                 }
                 return tabla;
             }
-            catch (Exception ex)
+            catch (Exception)
             { }
             finally
             {

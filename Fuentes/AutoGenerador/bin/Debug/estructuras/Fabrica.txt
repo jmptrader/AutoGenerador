@@ -1,0 +1,35 @@
+
+using System;
+using System.Collections.Generic;
+
+namespace SAFCore 
+{
+    public class  clsFabrica[TABLE]
+    {
+
+        public clsFabrica[TABLE](){
+
+		}
+
+        ~clsFabrica[TABLE]()
+        {
+
+		}
+
+		public virtual void Dispose(){
+
+		}
+
+		
+		public List<cls[TABLE]> CrearObjetosLIST(System.Data.DataTable tabla){
+		    var lista = new List<cls[TABLE]>();
+            foreach (System.Data.DataRow fila in tabla.Rows)
+            {
+                var obj = new cls[TABLE]();
+                [PROPIEDADES]
+                lista.Add(obj);
+            }
+            return lista;
+		}
+    }
+}
