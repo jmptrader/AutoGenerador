@@ -39,7 +39,6 @@ namespace AutoGenerador
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Entidades\\");
 
-
             exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Fabricas\\");
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Fabricas\\");
@@ -47,6 +46,10 @@ namespace AutoGenerador
             exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\DALC\\");
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\DALC\\");
+
+            exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Fachada\\");
+            if (!exists)
+                System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Fachada\\");
             
             DataTable datTablas = cargarEsquemaBD();
             if (datTablas != null)
@@ -116,7 +119,6 @@ namespace AutoGenerador
                     if (checkEdit4.Checked) //Fabrica
                     {
                         propiedades = "";
-                        
 
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\Fabrica.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
@@ -147,7 +149,6 @@ namespace AutoGenerador
                                     case "Boolean":
                                         propiedades += string.Format("obj.{0} = Convert.ToBoolean(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
                                         break;
-                                        
                                 }
                             }
                         }
@@ -159,6 +160,51 @@ namespace AutoGenerador
                         writer.Close();
                     }
                 }
+
+                propiedades = "";
+                metodos = "";
+
+                foreach (DataRow dr in datTablas.Rows)
+                {
+                    if (checkEdit3.Checked) //Fachada
+                    {                        
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\Fachada.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        propiedades += string.Format("private cls{0}DALC m_cls{1}DALC;{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+
+                        string metodo = string.Format("#region {0}{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        metodo += string.Format("public cls{0} consultarEntidad{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += "{" + Environment.NewLine;
+                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
+
+                        metodo += string.Format("public cls{0} consultarDatos{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += "{" + Environment.NewLine;
+                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
+
+                        metodo += string.Format("public cls{0} consultarLista{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += "{" + Environment.NewLine;
+                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
+                        metodo += "#endregion" + Environment.NewLine;
+
+                        metodos += metodo;
+                    }
+                }
+                if (checkEdit3.Checked) //Fachada
+                {
+                    archivo.Replace("[MIEMBROS]", propiedades);
+                    archivo.Replace("[METODOS]", metodos);
+
+                    System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}clsFachadaSAF.cs", buttonEdit1.Text, "Fachada\\"), false, Encoding.Unicode);
+                    writer.Write(archivo.ToString());
+                    writer.Close();
+                }
+
                 MessageBox.Show("Finalizo");
             }
         }
@@ -193,7 +239,7 @@ namespace AutoGenerador
             {
                 if (NombreTabla != null)
                 {
-                    OleDbCommand comando = new OleDbCommand("Select * from " + NombreTabla + " Where 0=1", conexion);
+                    OleDbCommand comando = new OleDbCommand("Select * from " + NombreTabla + " Where 0>1", conexion);
                     OleDbDataAdapter adaptador = new OleDbDataAdapter(comando);
                     tabla = new DataTable();
                     adaptador.Fill(tabla);

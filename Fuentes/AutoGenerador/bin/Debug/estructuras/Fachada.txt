@@ -1,0 +1,37 @@
+///////////////////////////////////////////////////////////
+//  clsFachadaSAF.cs
+//  Implementation of the Class Fachada SAF
+//  SAF - Integral Solutions SAS
+//  Created on:      05-abr-2013 12:08:31 p.m.
+//  Original author: German Alvarez
+///////////////////////////////////////////////////////////
+
+using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Reflection;
+using BaseDatos;
+
+namespace SAFCore {
+
+    public partial class clsFachadaSAF
+    {
+        private Comandos m_EjecutorBaseDatos;
+        #region Miembros
+        [MIEMBROS]
+        #endregion
+
+        public void Dispose()
+        {            
+            GC.SuppressFinalize(this);
+        }
+	
+        #region Metodos
+
+	[METODOS]
+
+        #endregion
+
+   }//end DALC
+
+}//end namespace SAFCore

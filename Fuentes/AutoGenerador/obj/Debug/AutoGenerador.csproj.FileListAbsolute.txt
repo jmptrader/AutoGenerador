@@ -8,16 +8,6 @@ c:\users\german\documents\visual studio 2013\Projects\AutoGenerador\AutoGenerado
 c:\users\german\documents\visual studio 2013\Projects\AutoGenerador\AutoGenerador\obj\Debug\AutoGenerador.exe.licenses
 c:\users\german\documents\visual studio 2013\Projects\AutoGenerador\AutoGenerador\obj\Debug\AutoGenerador.exe
 c:\users\german\documents\visual studio 2013\Projects\AutoGenerador\AutoGenerador\obj\Debug\AutoGenerador.pdb
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.exe.config
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.pdb
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.exe
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.pdb
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.csprojResolveAssemblyReference.cache
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.Form1.resources
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.Properties.Resources.resources
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.csproj.GenerateResource.Cache
-C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe.licenses
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.exe.config
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.pdb
@@ -28,3 +18,13 @@ C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.Properties.Resources.resources
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.csproj.GenerateResource.Cache
 C:\Users\kenchic\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe.licenses
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.exe.config
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.exe
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\bin\Debug\AutoGenerador.pdb
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.Form1.resources
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.Properties.Resources.resources
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.csproj.GenerateResource.Cache
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe.licenses
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.exe
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.pdb
+C:\Users\GERMAN\Documents\GitHub\AutoGenerador\Fuentes\AutoGenerador\obj\Debug\AutoGenerador.csprojResolveAssemblyReference.cache

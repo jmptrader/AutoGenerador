@@ -16,17 +16,18 @@ namespace SAFCore {
 
     public partial class cls[TABLE]DALC
     {
-    
+        private Comandos m_ejecutor_base_datos;
         public void Dispose()
         {            
             GC.SuppressFinalize(this);
         }
 	/// 
         /// 
-        public cls[TABLE] datatableConsultar()
+        public cls[TABLE] Consultar()
         {
             DataTable datos = new DataTable();
-            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();	
+            datos = this.datatableConsultar();
             return fab.CrearObjeto(datos);
         }
 
@@ -44,7 +45,7 @@ namespace SAFCore {
         public DataTable datatableConsultar()
         {
             DataTable datos = new DataTable();
-            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            datos = EjecutorBaseDatos.obtenerTabla("bd[TABLE]");			
             return datos;
         }	
 
@@ -52,23 +53,30 @@ namespace SAFCore {
 	/// <param name="obj"></param>
         public int Editar(cls[TABLE] obj)
         {
-            int resultado;
+            int resultado=0;
+	    return resultado;
 
         }
 		/// 
 		/// <param name="obj"></param>
         public int Eliminar(cls[TABLE] obj)
         {
-            int resultado;
+            int resultado=0;
+	    return resultado;
         }
 
 		/// 
 		/// <param name="obj"></param>
         public int Insertar(cls[TABLE] obj)
         {
-            int resultado;
-        
+            int resultado=0;
+	    return resultado;
 	}
+
+        public Comandos EjecutorBaseDatos{
+            get{return m_ejecutor_base_datos;}
+            set{m_ejecutor_base_datos = value;}
+        }        
 
    }//end DALC
 
