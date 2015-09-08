@@ -69,6 +69,7 @@ namespace AutoGenerador
                         DataTable datCampos = cargarEsquemaTabla(NombreTabla);
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         if (datCampos != null)
                         {
                             foreach (DataColumn dc in datCampos.Columns)
@@ -99,6 +100,7 @@ namespace AutoGenerador
                         DataTable datCampos = cargarEsquemaTabla(NombreTabla);
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         if (datCampos != null)
                         {
                             foreach (DataColumn dc in datCampos.Columns)
@@ -128,6 +130,7 @@ namespace AutoGenerador
                         DataTable datCampos = cargarEsquemaTabla(NombreTabla);
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         if (datCampos != null)
                         {
                             foreach (DataColumn dc in datCampos.Columns)
@@ -175,30 +178,42 @@ namespace AutoGenerador
                         string NombreTabla = dr[2].ToString();
                         propiedades += string.Format("private cls{0}DALC m_cls{1}DALC;{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
 
+                        //consultas
                         string metodo = string.Format("#region {0}{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodo += string.Format("public cls{0} consultarEntidad{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += string.Format("public cls{0} consultarEntidad{1}(List<ParametroBD> parametros)", NombreTabla.Substring(2), NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
-                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2),Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.Consultar(parametros);{1}",NombreTabla.Substring(2),Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodo += string.Format("public cls{0} consultarDatos{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += string.Format("public DataTable consultarDatos{0}(List<ParametroBD> parametros)", NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
-                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.datatableConsultar(parametros);{1}", NombreTabla.Substring(2), Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodo += string.Format("public cls{0} consultarLista{1}(Dictionary<string, string> parametro)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += string.Format("public List<cls{0}> consultarLista{1}(List<ParametroBD> parametros)", NombreTabla.Substring(2), NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
-                        metodo += "return null;" + Environment.NewLine;
+                        metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.listConsultar(parametros);{1}", NombreTabla.Substring(2), Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
                         metodo += "#endregion" + Environment.NewLine;
+
+                        //insertar
+
+                        //modificar
+
+                        //eliminar
 
                         metodos += metodo;
                     }
                 }
+
                 if (checkEdit3.Checked) //Fachada
                 {
                     archivo.Replace("[MIEMBROS]", propiedades);
                     archivo.Replace("[METODOS]", metodos);
+                    archivo.Replace("[NAMESPACE]", textEdit1.Text);
 
                     System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}clsFachadaSAF.cs", buttonEdit1.Text, "Fachada\\"), false, Encoding.Unicode);
                     writer.Write(archivo.ToString());

@@ -12,7 +12,7 @@ using System.Data;
 using System.Reflection;
 using BaseDatos;
 
-namespace SAFCore {
+namespace [NAMESPACE] {
 
     public partial class clsFachadaSAF
     {
@@ -21,15 +21,18 @@ namespace SAFCore {
         [MIEMBROS]
         #endregion
 
+		public clsFachadaSAF(ref Comandos ejecutor)
+        {
+            this.m_EjecutorBaseDatos = ejecutor;
+        }
+
         public void Dispose()
         {            
             GC.SuppressFinalize(this);
         }
 	
         #region Metodos
-
-	[METODOS]
-
+		[METODOS]
         #endregion
 
    }//end DALC

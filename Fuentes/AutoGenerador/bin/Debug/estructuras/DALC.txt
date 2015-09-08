@@ -12,72 +12,99 @@ using System.Data;
 using System.Reflection;
 using BaseDatos;
 
-namespace SAFCore {
+namespace [NAMESPACE] {
 
     public partial class cls[TABLE]DALC
     {
-        private Comandos m_ejecutor_base_datos;
+        private Comandos m_ejecutorBaseDatos;
+        public Comandos EjecutorBaseDatos
+        {
+            get { return m_ejecutorBaseDatos; }
+            set { m_ejecutorBaseDatos = value; }
+        }        
+
         public void Dispose()
         {            
             GC.SuppressFinalize(this);
         }
+
+        public cls[TABLE]DALC(Comandos ejecutorBaseDatos)
+        {            
+            EjecutorBaseDatos = ejecutorBaseDatos;
+        }
+
+        private string construirSelect()
+        {
+            const string Select = "Select * From bd[TABLE] ";
+            return Select;
+        }
+        private string CondicionSQL(List<ParametroBD> parametros)
+        {
+            string condicion = "";
+            if (parametros.Count > 0)
+            {
+                foreach (var parametro in parametros)
+                    condicion += parametro.Filtro;
+                condicion = " Where " + condicion.Substring(4);
+            }
+            return condicion;
+        }
+
 	    /// 
         /// 
-        public cls[TABLE] Consultar[TABLE](Dictionary<string, string> parametros)
+        public cls[TABLE] Consultar(List<ParametroBD> parametros)
         {
             DataTable datos = new DataTable();
-            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();	
-            datos = this.datatableConsultar();
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
+
+            string SentenciaSQL = "";
+            SentenciaSQL = construirSelect() + CondicionSQL(parametros);
+            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
             return fab.CrearObjeto(datos);
         }
 
         /// 
         /// 
-        public List<cls[TABLE]> listConsultar[TABLE](Dictionary<string, string> parametros)
+        public List<cls[TABLE]> listConsultar(List<ParametroBD> parametros)
         {
             DataTable datos = new DataTable();
-            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
+            clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
+            datos = EjecutorBaseDatos.obtenerConsulta("");
             return fab.CrearObjetos(datos);
         }
 
 	    /// 
         /// 
-        public DataTable datatableConsultar[TABLE](Dictionary<string, string> parametros)
+        public DataTable datatableConsultar(List<ParametroBD> parametros)
         {
             DataTable datos = new DataTable();
-            datos = EjecutorBaseDatos.obtenerTabla("bd[TABLE]");			
+            datos = EjecutorBaseDatos.obtenerConsulta("");			
             return datos;
         }	
 
 	    /// 
 	    /// <param name="obj"></param>
-        public int Editar[TABLE](cls[TABLE] obj)
+        public int Editar(cls[TABLE] obj)
         {
             int resultado=0;
-	            return resultado;
-
+			return resultado;
         }
 		/// 
 		/// <param name="obj"></param>
-        public int Eliminar[TABLE](cls[TABLE] obj)
+        public int Eliminar(cls[TABLE] obj)
         {
             int resultado=0;
-	        return resultado;
+			return resultado;
         }
 
 		/// 
 		/// <param name="obj"></param>
-        public int Insertar[TABLE](cls[TABLE] obj)
+        public int Insertar(cls[TABLE] obj)
         {
             int resultado=0;
-	        return resultado;
-	    }
-
-        public Comandos EjecutorBaseDatos{
-            get{return m_ejecutor_base_datos;}
-            set{m_ejecutor_base_datos = value;}
-        }        
+			return resultado;  
+		}
 
    }//end DALC
 
-}//end namespace SAFCore
+}//end namespace SAFseg

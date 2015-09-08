@@ -6,15 +6,14 @@
 //  Original author: German Alvarez
 ///////////////////////////////////////////////////////////
 
-using SAFCore;
 using System;
 
-namespace SAFCore {
+namespace [NAMESPACE] {
 	public class cls[TABLE] {
 
 		#region Propiedades
-		[PROPIEDADES]
-       		#endregion 
+			[PROPIEDADES]
+		#endregion 
 		
 		#region Construtores
 		public cls[TABLE](){

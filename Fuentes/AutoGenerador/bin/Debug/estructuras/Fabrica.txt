@@ -8,7 +8,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace SAFCore 
+namespace [NAMESPACE] 
 {
     public class  clsFabrica[TABLE]
     {
@@ -28,22 +28,24 @@ namespace SAFCore
 
 		
 		public List<cls[TABLE]> CrearObjetos(System.Data.DataTable tabla){
+			if (tabla.Rows.Count == 0) return null;
 		    var lista = new List<cls[TABLE]>();
             foreach (System.Data.DataRow fila in tabla.Rows)
             {
-                var obj = new cls[TABLE]();
-                [PROPIEDADES]
-                lista.Add(obj);
+				var obj = new cls[TABLE]();
+				[PROPIEDADES]
+				lista.Add(obj);
             }
             return lista;
 		}
 
         public cls[TABLE] CrearObjeto(System.Data.DataTable tabla){
+			if (tabla.Rows.Count == 0) return null;
             cls[TABLE] obj = new cls[TABLE]();
             if (tabla.Rows.Count == 0) return obj;
             System.Data.DataRow fila =  tabla.Rows[0];
             {                
-                [PROPIEDADES]
+				[PROPIEDADES]
             }
             return obj;
 		}
