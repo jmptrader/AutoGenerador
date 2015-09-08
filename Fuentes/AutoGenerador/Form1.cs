@@ -220,7 +220,7 @@ namespace AutoGenerador
                 tabla = conexion.GetOleDbSchemaTable(OleDbSchemaGuid.Tables, new object[] { null, null, null, "TABLE" });
                 return tabla;
             }
-            catch (Exception)
+            catch (Exception ex)
             { }
             finally
             {

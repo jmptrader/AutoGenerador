@@ -21,9 +21,9 @@ namespace SAFCore {
         {            
             GC.SuppressFinalize(this);
         }
-	/// 
+	    /// 
         /// 
-        public cls[TABLE] Consultar()
+        public cls[TABLE] Consultar[TABLE](Dictionary<string, string> parametros)
         {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();	
@@ -33,45 +33,45 @@ namespace SAFCore {
 
         /// 
         /// 
-        public List<cls[TABLE]> listConsultar()
+        public List<cls[TABLE]> listConsultar[TABLE](Dictionary<string, string> parametros)
         {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();		
             return fab.CrearObjetos(datos);
         }
 
-	/// 
+	    /// 
         /// 
-        public DataTable datatableConsultar()
+        public DataTable datatableConsultar[TABLE](Dictionary<string, string> parametros)
         {
             DataTable datos = new DataTable();
             datos = EjecutorBaseDatos.obtenerTabla("bd[TABLE]");			
             return datos;
         }	
 
-	/// 
-	/// <param name="obj"></param>
-        public int Editar(cls[TABLE] obj)
+	    /// 
+	    /// <param name="obj"></param>
+        public int Editar[TABLE](cls[TABLE] obj)
         {
             int resultado=0;
-	    return resultado;
+	            return resultado;
 
         }
 		/// 
 		/// <param name="obj"></param>
-        public int Eliminar(cls[TABLE] obj)
+        public int Eliminar[TABLE](cls[TABLE] obj)
         {
             int resultado=0;
-	    return resultado;
+	        return resultado;
         }
 
 		/// 
 		/// <param name="obj"></param>
-        public int Insertar(cls[TABLE] obj)
+        public int Insertar[TABLE](cls[TABLE] obj)
         {
             int resultado=0;
-	    return resultado;
-	}
+	        return resultado;
+	    }
 
         public Comandos EjecutorBaseDatos{
             get{return m_ejecutor_base_datos;}
