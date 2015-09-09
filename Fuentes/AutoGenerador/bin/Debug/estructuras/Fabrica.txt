@@ -42,10 +42,9 @@ namespace [NAMESPACE]
         public cls[TABLE] CrearObjeto(System.Data.DataTable tabla){
 			if (tabla.Rows.Count == 0) return null;
             cls[TABLE] obj = new cls[TABLE]();
-            if (tabla.Rows.Count == 0) return obj;
             System.Data.DataRow fila =  tabla.Rows[0];
             {                
-				[PROPIEDADES]
+			    [PROPIEDADES]
             }
             return obj;
 		}

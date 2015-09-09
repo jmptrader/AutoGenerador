@@ -180,22 +180,22 @@ namespace AutoGenerador
 
                         //consultas
                         string metodo = string.Format("#region {0}{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodo += string.Format("public cls{0} consultarEntidad{1}(List<ParametroBD> parametros)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += string.Format("public cls{0} consultarEntidad{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
                         metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2),Environment.NewLine);
-                        metodo += string.Format("return m_cls{0}DALC.Consultar(parametros);{1}",NombreTabla.Substring(2),Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.Consultar(sql);{1}",NombreTabla.Substring(2),Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodo += string.Format("public DataTable consultarDatos{0}(List<ParametroBD> parametros)", NombreTabla.Substring(2));
+                        metodo += string.Format("public DataTable consultarDatos{0}(SentenciaSQL sql)", NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
                         metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
-                        metodo += string.Format("return m_cls{0}DALC.datatableConsultar(parametros);{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.datatableConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodo += string.Format("public List<cls{0}> consultarLista{1}(List<ParametroBD> parametros)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        metodo += string.Format("public List<cls{0}> consultarLista{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
                         metodo += "{" + Environment.NewLine;
                         metodo += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
-                        metodo += string.Format("return m_cls{0}DALC.listConsultar(parametros);{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        metodo += string.Format("return m_cls{0}DALC.listConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
                         metodo += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
                         metodo += "#endregion" + Environment.NewLine;
 

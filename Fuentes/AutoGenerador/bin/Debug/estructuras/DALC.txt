@@ -38,13 +38,13 @@ namespace [NAMESPACE] {
             const string Select = "Select * From bd[TABLE] ";
             return Select;
         }
-        private string CondicionSQL(List<ParametroBD> parametros)
+        private string CondicionSQL(SentenciaSQL sql)
         {
             string condicion = "";
-            if (parametros.Count > 0)
+            if (sql.FiltroBD.Count > 0)
             {
-                foreach (var parametro in parametros)
-                    condicion += parametro.Filtro;
+                foreach (var filtro in sql.FiltroBD)
+                    condicion += filtro.Filtro;
                 condicion = " Where " + condicion.Substring(4);
             }
             return condicion;
@@ -52,33 +52,38 @@ namespace [NAMESPACE] {
 
 	    /// 
         /// 
-        public cls[TABLE] Consultar(List<ParametroBD> parametros)
+        public cls[TABLE] Consultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
 
             string SentenciaSQL = "";
-            SentenciaSQL = construirSelect() + CondicionSQL(parametros);
+            SentenciaSQL = construirSelect() + CondicionSQL(sql);
             datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
             return fab.CrearObjeto(datos);
         }
 
         /// 
         /// 
-        public List<cls[TABLE]> listConsultar(List<ParametroBD> parametros)
+        public List<cls[TABLE]> listConsultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
-            datos = EjecutorBaseDatos.obtenerConsulta("");
+
+            string SentenciaSQL = "";
+            SentenciaSQL = construirSelect() + CondicionSQL(sql);
+            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
             return fab.CrearObjetos(datos);
         }
 
 	    /// 
         /// 
-        public DataTable datatableConsultar(List<ParametroBD> parametros)
+        public DataTable datatableConsultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
-            datos = EjecutorBaseDatos.obtenerConsulta("");			
+            string SentenciaSQL = "";
+            SentenciaSQL = construirSelect() + CondicionSQL(sql);
+            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);			
             return datos;
         }	
 
