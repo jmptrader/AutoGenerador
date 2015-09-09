@@ -34,6 +34,7 @@ namespace AutoGenerador
             StringBuilder archivo = new StringBuilder();
             string propiedades;
             string metodos;
+            string enumCampos;
 
             bool exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Entidades\\");
             if (!exists)
@@ -60,6 +61,7 @@ namespace AutoGenerador
                     {
                         propiedades = "";
                         metodos = "";
+                        enumCampos = "";
 
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\Entidad.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
@@ -76,11 +78,13 @@ namespace AutoGenerador
                             {
                                 propiedades += string.Format("private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
                                 metodos += string.Format("public {0} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
+                                enumCampos += string.Format("{0},", dc.ColumnName.ToLower());
                             }
                         }
 
                         archivo.Replace("[PROPIEDADES]", propiedades);
                         archivo.Replace("[METODOS]", metodos);
+                        archivo.Replace("[ENUMCAMPOS]", enumCampos);
 
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}cls{2}.cs", buttonEdit1.Text, "Entidades\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());
