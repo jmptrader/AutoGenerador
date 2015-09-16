@@ -16,20 +16,9 @@ namespace [NAMESPACE] {
 
     public partial class clsFachada[NAMESPACE]
     {
-        private Comandos m_EjecutorBaseDatos;
-        #region Miembros
-        [MIEMBROS]
+        #region Metodos
+        [METODOS]
         #endregion
-
-		public clsFachada(ref Comandos ejecutor)
-        {
-            this.m_EjecutorBaseDatos = ejecutor;
-        }
-
-        public void Dispose()
-        {            
-            GC.SuppressFinalize(this);
-        }
 
    }//end DALC
 
