@@ -35,9 +35,10 @@ namespace [NAMESPACE] {
 
         private string construirSelect()
         {
-            const string Select = "Select * From bd[TABLE] ";
+            const string Select = "Select [CAMPOS] From bd[TABLE] ";
             return Select;
         }
+
         private string CondicionSQL(SentenciaSQL sql)
         {
             string condicion = "";
@@ -50,8 +51,18 @@ namespace [NAMESPACE] {
             return condicion;
         }
 
-	    /// 
-        /// 
+	    private string OrdenSQL(SentenciaSQL sql)
+        {
+            string ordenar = "";
+            if (sql.OrdenBD.Count > 0)
+            {
+                foreach (var orden in sql.OrdenBD)
+                    ordenar += "," + orden;
+                ordenar = " Order By " + ordenar.Substring(1);
+            }
+            return ordenar;
+        }
+
         public cls[TABLE] Consultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
@@ -62,9 +73,7 @@ namespace [NAMESPACE] {
             datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
             return fab.CrearObjeto(datos);
         }
-
-        /// 
-        /// 
+        
         public List<cls[TABLE]> listConsultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
@@ -75,9 +84,7 @@ namespace [NAMESPACE] {
             datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
             return fab.CrearObjetos(datos);
         }
-
-	    /// 
-        /// 
+	    
         public DataTable datatableConsultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
@@ -86,24 +93,19 @@ namespace [NAMESPACE] {
             datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);			
             return datos;
         }	
-
-	    /// 
-	    /// <param name="obj"></param>
+	    
         public int Editar(cls[TABLE] obj)
         {
             int resultado=0;
 			return resultado;
         }
-		/// 
-		/// <param name="obj"></param>
+
         public int Eliminar(cls[TABLE] obj)
         {
             int resultado=0;
 			return resultado;
         }
 
-		/// 
-		/// <param name="obj"></param>
         public int Insertar(cls[TABLE] obj)
         {
             int resultado=0;
@@ -112,4 +114,4 @@ namespace [NAMESPACE] {
 
    }//end DALC
 
-}//end namespace SAFseg
+}//end namespace [NAMESPACE]

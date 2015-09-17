@@ -36,6 +36,7 @@ namespace AutoGenerador
             string propiedadesFachada;
             string metodos;
             string enumCampos;
+            string campos;
 
             bool exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Entidades\\");
             if (!exists)
@@ -97,6 +98,7 @@ namespace AutoGenerador
                     {
                         propiedades = "";
                         metodos = "";
+                        campos = "";
 
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\DALC.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
@@ -111,13 +113,17 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
+                                campos += "," + dc.ColumnName.ToLower();
                                 propiedades += string.Format("private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
                                 metodos += string.Format("public {0} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
                             }
+
+                            campos = campos.Substring(1);
                         }
 
                         archivo.Replace("[PROPIEDADES]", propiedades);
                         archivo.Replace("[METODOS]", metodos);
+                        archivo.Replace("[CAMPOS]", campos);
 
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}cls{2}DALC.cs", buttonEdit1.Text, "DALC\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());

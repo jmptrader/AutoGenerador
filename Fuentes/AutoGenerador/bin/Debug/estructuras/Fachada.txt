@@ -21,7 +21,7 @@ namespace [NAMESPACE] {
         [MIEMBROS]
         #endregion
 
-		public clsFachada(ref Comandos ejecutor)
+		public clsFachada[NAMESPACE](ref Comandos ejecutor)
         {
             this.m_EjecutorBaseDatos = ejecutor;
         }
@@ -33,4 +33,4 @@ namespace [NAMESPACE] {
 
    }//end DALC
 
-}//end namespace SAFCore
+}//end namespace [NAMESPACE]
