@@ -31,6 +31,6 @@ namespace [NAMESPACE] {
             GC.SuppressFinalize(this);
         }
 
-   }//end DALC
+   }//end Fachada
 
 }//end namespace [NAMESPACE]

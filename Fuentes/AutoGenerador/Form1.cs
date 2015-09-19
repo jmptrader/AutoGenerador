@@ -77,10 +77,14 @@ namespace AutoGenerador
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         if (datCampos != null)
                         {
+                            string nulo;
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-                                propiedades += string.Format("private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
-                                metodos += string.Format("public {0} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
+                                nulo = "";
+                                if (dc.DataType.Name.IndexOf("Int") >= 0 )
+                                    nulo = "?";
+                                propiedades += string.Format("private {0}{3} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine, nulo);
+                                metodos += string.Format("public {0}{6} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower(), nulo);
                                 enumCampos += string.Format("{0},", dc.ColumnName.ToLower());
                             }
                         }
@@ -179,7 +183,7 @@ namespace AutoGenerador
                     {
                         metodos = "";
 
-                        //archivo padre
+                        //archivo hija fachada
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\FachadaHija.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
                         reader.Close();
@@ -188,33 +192,27 @@ namespace AutoGenerador
                         propiedadesFachada += string.Format("private cls{0}DALC m_cls{1}DALC;{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
 
                         //consultas
-                        metodos = string.Format("#region {0}{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("public cls{0} consultarEntidad{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
-                        metodos += "{" + Environment.NewLine;
-                        metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("return m_cls{0}DALC.Consultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
+                        //metodos = string.Format("#region {0}{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("public cls{0} consultarEntidad{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        //metodos += "{" + Environment.NewLine;
+                        //metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("return m_cls{0}DALC.Consultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodos += string.Format("public DataTable consultarDatos{0}(SentenciaSQL sql)", NombreTabla.Substring(2));
-                        metodos += "{" + Environment.NewLine;
-                        metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("return m_cls{0}DALC.datatableConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
+                        //metodos += string.Format("public DataTable consultarDatos{0}(SentenciaSQL sql)", NombreTabla.Substring(2));
+                        //metodos += "{" + Environment.NewLine;
+                        //metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("return m_cls{0}DALC.datatableConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
 
-                        metodos += string.Format("public List<cls{0}> consultarLista{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
-                        metodos += "{" + Environment.NewLine;
-                        metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("return m_cls{0}DALC.listConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
-                        metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);
-                        metodos += "#endregion" + Environment.NewLine;
+                        //metodos += string.Format("public List<cls{0}> consultarLista{1}(SentenciaSQL sql)", NombreTabla.Substring(2), NombreTabla.Substring(2));
+                        //metodos += "{" + Environment.NewLine;
+                        //metodos += string.Format("m_cls{0}DALC = new cls{1}DALC(m_EjecutorBaseDatos);{2}", NombreTabla.Substring(2), NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("return m_cls{0}DALC.listConsultar(sql);{1}", NombreTabla.Substring(2), Environment.NewLine);
+                        //metodos += string.Format("}} {0}{1}", Environment.NewLine, Environment.NewLine);                        
+                        //metodos += "#endregion" + Environment.NewLine;
 
-                        //insertar
-
-                        //modificar
-
-                        //eliminar
-
-                        archivo.Replace("[METODOS]", metodos);
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
 
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}clsFachada{2}.cs", buttonEdit1.Text, "Fachada\\", NombreTabla.Substring(2)), false, Encoding.Unicode);

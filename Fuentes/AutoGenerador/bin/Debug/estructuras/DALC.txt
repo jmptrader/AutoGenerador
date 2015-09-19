@@ -39,12 +39,38 @@ namespace [NAMESPACE] {
             return Select;
         }
 
+		private string construirInsert(object obj)
+        {
+            string Insert = "";
+            if (obj != null)
+            {
+                string campos = "";
+                string valores = "";
+                Type type = obj.GetType();
+                foreach (PropertyInfo propertyInfo in type.GetProperties())
+                {
+                    if (propertyInfo.CanRead)
+                    {
+                        object valor = propertyInfo.GetValue(obj, null);
+                        if (valor != null)
+                        {
+                            campos += "," + propertyInfo.Name;
+                            valores += ",@" + propertyInfo.Name;
+                            EjecutorBaseDatos.agregarParametro(propertyInfo.Name, valor);
+                        }
+                    }
+                }
+
+                Insert += string.Format("Insert Into bd[TABLE] ({0}) Values ({1})", campos.Substring(1), valores.Substring(1));
+            }
+            return Insert;
+        }
+
         private string CondicionSQL(SentenciaSQL sql)
         {
             string condicion = "";
             if (sql.FiltroBD.Count > 0)
-            {
-                EjecutorBaseDatos.limpiarParametros();
+            {                
                 foreach (var filtro in sql.FiltroBD)
                 {
                     EjecutorBaseDatos.agregarParametro(filtro.Campo,filtro.Valor);
@@ -72,9 +98,10 @@ namespace [NAMESPACE] {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
 
-            string SentenciaSQL = "";
-            SentenciaSQL = construirSelect() + CondicionSQL(sql);
-            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
+            string sentenciaSQL = "";
+			EjecutorBaseDatos.limpiarParametros();
+            sentenciaSQL = construirSelect() + CondicionSQL(sql);
+            datos = EjecutorBaseDatos.obtenerConsulta(sentenciaSQL);
             return fab.CrearObjeto(datos);
         }
         
@@ -83,37 +110,45 @@ namespace [NAMESPACE] {
             DataTable datos = new DataTable();
             clsFabrica[TABLE] fab = new clsFabrica[TABLE]();
 
-            string SentenciaSQL = "";
-            SentenciaSQL = construirSelect() + CondicionSQL(sql);
-            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);
+            string sentenciaSQL = "";
+			EjecutorBaseDatos.limpiarParametros();
+            sentenciaSQL = construirSelect() + CondicionSQL(sql);
+            datos = EjecutorBaseDatos.obtenerConsulta(sentenciaSQL);
             return fab.CrearObjetos(datos);
         }
 	    
         public DataTable datatableConsultar(SentenciaSQL sql)
         {
             DataTable datos = new DataTable();
-            string SentenciaSQL = "";
-            SentenciaSQL = construirSelect() + CondicionSQL(sql);
-            datos = EjecutorBaseDatos.obtenerConsulta(SentenciaSQL);			
+            string sentenciaSQL = "";
+			EjecutorBaseDatos.limpiarParametros();
+            sentenciaSQL = construirSelect() + CondicionSQL(sql);
+            datos = EjecutorBaseDatos.obtenerConsulta(sentenciaSQL);			
             return datos;
         }	
 	    
-        public int Editar(cls[TABLE] obj)
+        public int Editar(cls[TABLE] obj, SentenciaSQL sql)
         {
-            int resultado=0;
-			return resultado;
+            int resultado = 0;
+            EjecutorBaseDatos.limpiarParametros();
+            string sentenciaSQL = construirUpdate(obj) + CondicionSQL(sql);
+            resultado = EjecutorBaseDatos.ejecutarSentencia(sentenciaSQL);
+            return resultado;
         }
 
-        public int Eliminar(cls[TABLE] obj)
+        public int Eliminar(cls[TABLE] obj, SentenciaSQL sql)
         {
             int resultado=0;
+			EjecutorBaseDatos.limpiarParametros();
 			return resultado;
         }
 
         public int Insertar(cls[TABLE] obj)
         {
-            int resultado=0;
-			return resultado;  
+            int resultado = 0;
+            string sentenciaSQL = construirInsert(obj);
+            resultado = EjecutorBaseDatos.ejecutarSentencia(sentenciaSQL);
+            return resultado;  
 		}
 
    }//end DALC

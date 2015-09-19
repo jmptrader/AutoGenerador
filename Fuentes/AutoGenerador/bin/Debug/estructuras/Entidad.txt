@@ -12,16 +12,16 @@ namespace [NAMESPACE] {
 	public class cls[TABLE] {
 
 		#region Propiedades
-			[PROPIEDADES]
+		[PROPIEDADES]
 		#endregion 
 		
 		#region Construtores
 		public cls[TABLE](){
-
+			
 		}
 
 		~cls[TABLE](){
-
+			
 		}
 
 		public void Dispose(bool disposing){

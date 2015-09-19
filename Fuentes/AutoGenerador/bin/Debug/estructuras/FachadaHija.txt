@@ -17,9 +17,43 @@ namespace [NAMESPACE] {
     public partial class clsFachada[NAMESPACE]
     {
         #region Metodos
-        [METODOS]
+        public cls[TABLE] consultarEntidad[TABLE](SentenciaSQL sql)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.Consultar(sql);
+        }
+
+        public DataTable consultarDatos[TABLE](SentenciaSQL sql)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.datatableConsultar(sql);
+        }
+
+        public List<cls[TABLE]> consultarLista[TABLE](SentenciaSQL sql)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.listConsultar(sql);
+        }
+
+        public int insertar[TABLE](cls[TABLE] obj)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.Insertar(obj);
+        }
+
+        public int editar[TABLE](cls[TABLE] obj, SentenciaSQL sql)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.Editar(obj, sql);
+        }
+
+        public int eliminar[TABLE](cls[TABLE] obj, SentenciaSQL sql)
+        {
+            m_cls[TABLE]DALC = new cls[TABLE]DALC(m_EjecutorBaseDatos);
+            return m_cls[TABLE]DALC.Eliminar(obj, sql);
+        }
         #endregion
 
-   }//end DALC
+   }//end Fachada
 
 }//end namespace SAFCore
