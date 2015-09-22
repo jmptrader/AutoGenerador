@@ -66,6 +66,31 @@ namespace [NAMESPACE] {
             return Insert;
         }
 
+        private string construirUpdate(object obj)
+        {
+            string Insert = "";
+            if (obj != null)
+            {
+                string update = "";
+                Type type = obj.GetType();
+                foreach (PropertyInfo propertyInfo in type.GetProperties())
+                {
+                    if (propertyInfo.CanRead)
+                    {
+                        object valor = propertyInfo.GetValue(obj, null);
+                        if (valor != null)
+                        {
+                            update += ", " + propertyInfo.Name + " = @" + propertyInfo.Name;
+                            EjecutorBaseDatos.agregarParametro(propertyInfo.Name, valor);
+                        }
+                    }
+                }
+
+                Insert += string.Format("Update bd[TABLE] SET {0}", update.Substring(1));
+            }
+            return Insert;
+        }
+
         private string CondicionSQL(SentenciaSQL sql)
         {
             string condicion = "";
