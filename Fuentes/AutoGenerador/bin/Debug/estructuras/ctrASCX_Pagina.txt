@@ -1,0 +1,14 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ctr[TABLE]Form.ascx.cs" Inherits="SAFWeb.[NAMESPACE].Controles.ctr[TABLE]Form" %>
+<div class="layoutForm">
+    <dx:ASPxFormLayout ID="flDatos" runat="server">
+        <Items>
+            <dx:LayoutGroup Caption="Datos [TABLE]">
+                <Items>
+                   [PROPIEDADES]    
+				   
+				                 
+                </Items>
+            </dx:LayoutGroup>
+        </Items>
+    </dx:ASPxFormLayout>
+</div>

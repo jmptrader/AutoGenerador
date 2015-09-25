@@ -171,8 +171,9 @@ namespace [NAMESPACE] {
         public int Insertar(cls[TABLE] obj)
         {
             int resultado = 0;
+			EjecutorBaseDatos.limpiarParametros();
             string sentenciaSQL = construirInsert(obj);
-            resultado = EjecutorBaseDatos.ejecutarSentencia(sentenciaSQL);
+            resultado = EjecutorBaseDatos.ejecutarSentenciaInsert(sentenciaSQL);
             return resultado;  
 		}
 

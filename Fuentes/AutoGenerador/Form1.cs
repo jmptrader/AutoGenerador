@@ -37,6 +37,7 @@ namespace AutoGenerador
             string metodos;
             string enumCampos;
             string campos;
+            string entidad;
 
             bool exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Entidades\\");
             if (!exists)
@@ -53,13 +54,18 @@ namespace AutoGenerador
             exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Fachada\\");
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Fachada\\");
-            
+
+            exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Controles\\");
+            if (!exists)
+                System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Controles\\");
+
             DataTable datTablas = cargarEsquemaBD();
             if (datTablas != null)
             {
                 propiedadesFachada = "";
                 foreach (DataRow dr in datTablas.Rows)
                 {
+                    #region Entidad
                     if (checkEdit1.Checked) //Entidad
                     {
                         propiedades = "";
@@ -81,7 +87,7 @@ namespace AutoGenerador
                             foreach (DataColumn dc in datCampos.Columns)
                             {
                                 nulo = "";
-                                if (dc.DataType.Name.IndexOf("Int") >= 0 )
+                                if (dc.DataType.Name.IndexOf("Int") >= 0)
                                     nulo = "?";
                                 propiedades += string.Format("private {0}{3} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine, nulo);
                                 metodos += string.Format("public {0}{6} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower(), nulo);
@@ -97,7 +103,9 @@ namespace AutoGenerador
                         writer.Write(archivo.ToString());
                         writer.Close();
                     }
+                    #endregion
 
+                    #region DALC
                     if (checkEdit2.Checked) //DALC
                     {
                         propiedades = "";
@@ -133,7 +141,9 @@ namespace AutoGenerador
                         writer.Write(archivo.ToString());
                         writer.Close();
                     }
+                    #endregion
 
+                    #region Fabrica
                     if (checkEdit4.Checked) //Fabrica
                     {
                         propiedades = "";
@@ -178,8 +188,10 @@ namespace AutoGenerador
                         writer.Write(archivo.ToString());
                         writer.Close();
                     }
+                    #endregion
 
-                    if (checkEdit3.Checked) //Fachada Hijas
+                    #region Fachada Hija
+                    if (checkEdit3.Checked) //Fachada Hija
                     {
                         metodos = "";
 
@@ -220,11 +232,96 @@ namespace AutoGenerador
                         writer.Close();
 
                     }
+                    #endregion
+
+                    #region Controles
+                    if (checkEdit5.Checked) //controles form
+                    {
+                        propiedades = "";
+                        entidad = "";
+
+                        #region Pagina
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\ctrASCX_Pagina.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        DataTable datCampos = cargarEsquemaTabla(NombreTabla);
+                        if (datCampos != null)
+                        {
+                            foreach (DataColumn dc in datCampos.Columns)
+                            {
+
+                                string entidadTemporal = string.Format("{0}.{1} = txt{1}.Text;{2}", NombreTabla.Substring(2).ToLower(), dc.ColumnName, Environment.NewLine);
+                                string componente = string.Format("<dx:ASPxTextBox ID=\"txt{0}\" runat=\"server\" CssClass=\"TextBox\">{1}</dx:ASPxTextBox>{1}", dc.ColumnName, Environment.NewLine);
+
+                                if (dc.DataType.Name.IndexOf("Boolean") >= 0)
+                                {
+                                    componente = string.Format("<dx:ASPxCheckBox ID=\"ck{0}\" runat=\"server\" CheckState=\"Unchecked\" CssClass=\"CheckBox\">{1}</dx:ASPxCheckBox>", dc.ColumnName, Environment.NewLine);
+
+                                    entidadTemporal = string.Format("{0}.{1} = ck{1}.Checked ? true : false;{2}", NombreTabla.Substring(2).ToLower(), dc.ColumnName, Environment.NewLine);
+                                }
+
+                                if (dc.DataType.Name.IndexOf("Int") >= 0)
+                                {
+                                    entidadTemporal = ""; 
+                                }
+
+                                if (dc.ColumnName == "Id")
+                                    componente = string.Format("<dx:ASPxLabel ID=\"lb{0}\" runat=\"server\" Text=\"0\">{1}</dx:ASPxLabel>{1}", dc.ColumnName, Environment.NewLine);
+
+                                if (dc.ColumnName.Substring(0, 2) == "id")
+                                {
+                                    componente = string.Format("<dx:ASPxComboBox ID=\"cb{0}\" runat=\"server\" CssClass=\"ComboBox\">{1}</dx:ASPxComboBox>", dc.ColumnName, Environment.NewLine);
+                                }
+
+                                propiedades += string.Format("<dx:LayoutItem Caption=\"{0}\">{1}", dc.ColumnName, Environment.NewLine);
+                                propiedades += string.Format("<LayoutItemNestedControlCollection>{0}", Environment.NewLine);
+                                propiedades += string.Format("<dx:LayoutItemNestedControlContainer runat=\"server\">{0}", Environment.NewLine);
+                                propiedades += componente;
+                                propiedades += string.Format("</dx:LayoutItemNestedControlContainer>{0}</LayoutItemNestedControlCollection>{0}</dx:LayoutItem>", Environment.NewLine);
+                            }
+                        }
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}Form.ascx", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Codigo
+                        reader = new System.IO.StreamReader("estructuras\\ctrASCX_Codigo.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}Form.ascx.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Diseño
+                        reader = new System.IO.StreamReader("estructuras\\ctrASCX_Diseno.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}Form.ascx.designer.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                    }
+                    #endregion
                 }
 
-                
-                
-
+                #region Fachada Padre
                 if (checkEdit3.Checked) //Fachada Padre
                 {
                     //archivo padre fachada
@@ -239,6 +336,7 @@ namespace AutoGenerador
                     writer.Write(archivo.ToString());
                     writer.Close();
                 }
+                #endregion
 
                 MessageBox.Show("Finalizo");
             }
