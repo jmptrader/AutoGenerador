@@ -251,35 +251,40 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-
-                                string entidadTemporal = string.Format("{0}.{1} = txt{1}.Text;{2}", NombreTabla.Substring(2).ToLower(), dc.ColumnName, Environment.NewLine);
+                                string entidadTemporal="";
+                                if (dc.ColumnName != "Id")
+                                    entidadTemporal = string.Format("{0}.{1} = txt{1}.Text;{2}", NombreTabla.Substring(2), dc.ColumnName, Environment.NewLine);
                                 string componente = string.Format("<dx:ASPxTextBox ID=\"txt{0}\" runat=\"server\" CssClass=\"TextBox\">{1}</dx:ASPxTextBox>{1}", dc.ColumnName, Environment.NewLine);
 
                                 if (dc.DataType.Name.IndexOf("Boolean") >= 0)
                                 {
                                     componente = string.Format("<dx:ASPxCheckBox ID=\"ck{0}\" runat=\"server\" CheckState=\"Unchecked\" CssClass=\"CheckBox\">{1}</dx:ASPxCheckBox>", dc.ColumnName, Environment.NewLine);
-
-                                    entidadTemporal = string.Format("{0}.{1} = ck{1}.Checked ? true : false;{2}", NombreTabla.Substring(2).ToLower(), dc.ColumnName, Environment.NewLine);
+                                    entidadTemporal = string.Format("{0}.{1} = ck{1}.Checked ? true : false;{2}", NombreTabla.Substring(2), dc.ColumnName, Environment.NewLine);
                                 }
 
-                                if (dc.DataType.Name.IndexOf("Int") >= 0)
+                                if (dc.DataType.Name.IndexOf("Int") >= 0 || dc.DataType.Name.IndexOf("Decimal") >= 0)
                                 {
-                                    entidadTemporal = ""; 
+                                    if (dc.ColumnName != "Id")
+                                        entidadTemporal = string.Format("{0} valor{1} = 0;{3}{0}.TryParse(txt{1}.Text, out valor{1});{3}{2}.{1} = valor{1};{3}", dc.DataType.Name, dc.ColumnName, NombreTabla.Substring(2), Environment.NewLine);
+                                    componente = string.Format("<dx:ASPxTextBox ID=\"txt{0}\" runat=\"server\" CssClass=\"TextBox\" DisplayFormatString=\"N0\">{1}<MaskSettings Mask=\"&lt;0..10000000&gt;\"/>{1}</dx:ASPxTextBox>{1}", dc.ColumnName, Environment.NewLine);
                                 }
 
                                 if (dc.ColumnName == "Id")
                                     componente = string.Format("<dx:ASPxLabel ID=\"lb{0}\" runat=\"server\" Text=\"0\">{1}</dx:ASPxLabel>{1}", dc.ColumnName, Environment.NewLine);
 
-                                if (dc.ColumnName.Substring(0, 2) == "id")
+                                if (dc.ColumnName.Substring(0, 2) == "id" || dc.ColumnName == "Estado")
                                 {
                                     componente = string.Format("<dx:ASPxComboBox ID=\"cb{0}\" runat=\"server\" CssClass=\"ComboBox\">{1}</dx:ASPxComboBox>", dc.ColumnName, Environment.NewLine);
+                                    entidadTemporal = string.Format("if (cb{0}.Value != null){1}{2}.{0} = ({3})cb{0}.Value;{1}", dc.ColumnName, Environment.NewLine, NombreTabla.Substring(2), dc.DataType.Name);
                                 }
 
                                 propiedades += string.Format("<dx:LayoutItem Caption=\"{0}\">{1}", dc.ColumnName, Environment.NewLine);
                                 propiedades += string.Format("<LayoutItemNestedControlCollection>{0}", Environment.NewLine);
                                 propiedades += string.Format("<dx:LayoutItemNestedControlContainer runat=\"server\">{0}", Environment.NewLine);
                                 propiedades += componente;
-                                propiedades += string.Format("</dx:LayoutItemNestedControlContainer>{0}</LayoutItemNestedControlCollection>{0}</dx:LayoutItem>", Environment.NewLine);
+                                propiedades += string.Format("</dx:LayoutItemNestedControlContainer>{0}</LayoutItemNestedControlCollection>{0}</dx:LayoutItem>{0}", Environment.NewLine);
+
+                                entidad += entidadTemporal;
                             }
                         }
 
@@ -299,6 +304,8 @@ namespace AutoGenerador
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[ENTIDAD]", entidad);
+
                         writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}Form.ascx.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());
                         writer.Close();

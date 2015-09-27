@@ -4,9 +4,14 @@
         <Items>
             <dx:LayoutGroup Caption="Datos [TABLE]">
                 <Items>
-                   [PROPIEDADES]    
-				   
-				                 
+                   [PROPIEDADES]
+                   <dx:LayoutItem ShowCaption="False" HorizontalAlign="Left" Width="100">
+                        <LayoutItemNestedControlCollection>
+                            <dx:LayoutItemNestedControlContainer ID="LayoutItemNestedControlContainer1" runat="server" SupportsDisabledAttribute="True">
+                                <dx:ASPxButton ID="btGuardar" runat="server" Text="Guardar" OnClick="btGuardar_Click" Width="100" />
+                            </dx:LayoutItemNestedControlContainer>
+                        </LayoutItemNestedControlCollection>
+                    </dx:LayoutItem>
                 </Items>
             </dx:LayoutGroup>
         </Items>
