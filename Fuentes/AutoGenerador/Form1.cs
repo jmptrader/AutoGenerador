@@ -38,6 +38,7 @@ namespace AutoGenerador
             string enumCampos;
             string campos;
             string entidad;
+            string entidadCombo;
 
             bool exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Entidades\\");
             if (!exists)
@@ -58,6 +59,10 @@ namespace AutoGenerador
             exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Controles\\");
             if (!exists)
                 System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Controles\\");
+
+            exists = System.IO.Directory.Exists(buttonEdit1.Text + "\\Paginas\\");
+            if (!exists)
+                System.IO.Directory.CreateDirectory(buttonEdit1.Text + "\\Paginas\\");
 
             DataTable datTablas = cargarEsquemaBD();
             if (datTablas != null)
@@ -87,11 +92,11 @@ namespace AutoGenerador
                             foreach (DataColumn dc in datCampos.Columns)
                             {
                                 nulo = "";
-                                if (dc.DataType.Name.IndexOf("Int") >= 0)
+                                if (dc.DataType.Name.IndexOf("Int") >= 0 || dc.DataType.Name.IndexOf("Byte") >= 0)
                                     nulo = "?";
                                 propiedades += string.Format("private {0}{3} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine, nulo);
                                 metodos += string.Format("public {0}{6} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower(), nulo);
-                                enumCampos += string.Format("{0},", dc.ColumnName.ToLower());
+                                enumCampos += string.Format("{0},", dc.ColumnName);
                             }
                         }
 
@@ -125,7 +130,7 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-                                campos += "," + dc.ColumnName.ToLower();
+                                campos += "," + dc.ColumnName;
                                 propiedades += string.Format("private {0} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine);
                                 metodos += string.Format("public {0} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower());
                             }
@@ -159,24 +164,16 @@ namespace AutoGenerador
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         if (datCampos != null)
                         {
+
                             foreach (DataColumn dc in datCampos.Columns)
                             {
                                 switch (dc.DataType.Name)
                                 {
-                                    case "Int16":
-                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
-                                        break;
-                                    case "Int32":
-                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
-                                        break;
-                                    case "Int64":
-                                        propiedades += string.Format("obj.{0} = Convert.ToInt16(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
-                                        break;
                                     case "String":
                                         propiedades += string.Format("obj.{0} = fila[\"{1}\"].ToString();{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
                                         break;
-                                    case "Boolean":
-                                        propiedades += string.Format("obj.{0} = Convert.ToBoolean(fila[\"{1}\"]);{2}", dc.ColumnName, dc.ColumnName, Environment.NewLine);
+                                    default:
+                                        propiedades += string.Format("obj.{0} = Convert.To{1}(fila[\"{0}\"]);{2}", dc.ColumnName, dc.DataType.Name, Environment.NewLine);
                                         break;
                                 }
                             }
@@ -239,9 +236,10 @@ namespace AutoGenerador
                     {
                         propiedades = "";
                         entidad = "";
+                        entidadCombo = "";
 
                         #region Pagina
-                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\ctrASCX_Pagina.txt");
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\ctrForm_Pagina.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
                         reader.Close();
 
@@ -251,9 +249,10 @@ namespace AutoGenerador
                         {
                             foreach (DataColumn dc in datCampos.Columns)
                             {
-                                string entidadTemporal="";
-                                if (dc.ColumnName != "Id")
+                                string entidadTemporal = "";
+                                if (!dc.ReadOnly)
                                     entidadTemporal = string.Format("{0}.{1} = txt{1}.Text;{2}", NombreTabla.Substring(2), dc.ColumnName, Environment.NewLine);
+
                                 string componente = string.Format("<dx:ASPxTextBox ID=\"txt{0}\" runat=\"server\" CssClass=\"TextBox\">{1}</dx:ASPxTextBox>{1}", dc.ColumnName, Environment.NewLine);
 
                                 if (dc.DataType.Name.IndexOf("Boolean") >= 0)
@@ -262,7 +261,7 @@ namespace AutoGenerador
                                     entidadTemporal = string.Format("{0}.{1} = ck{1}.Checked ? true : false;{2}", NombreTabla.Substring(2), dc.ColumnName, Environment.NewLine);
                                 }
 
-                                if (dc.DataType.Name.IndexOf("Int") >= 0 || dc.DataType.Name.IndexOf("Decimal") >= 0)
+                                if (dc.DataType.Name.IndexOf("Int") >= 0 || dc.DataType.Name.IndexOf("Decimal") >= 0 || dc.DataType.Name.IndexOf("Double") >= 0)
                                 {
                                     if (dc.ColumnName != "Id")
                                         entidadTemporal = string.Format("{0} valor{1} = 0;{3}{0}.TryParse(txt{1}.Text, out valor{1});{3}{2}.{1} = valor{1};{3}", dc.DataType.Name, dc.ColumnName, NombreTabla.Substring(2), Environment.NewLine);
@@ -275,10 +274,18 @@ namespace AutoGenerador
                                 if (dc.ColumnName.Substring(0, 2) == "id" || dc.ColumnName == "Estado")
                                 {
                                     componente = string.Format("<dx:ASPxComboBox ID=\"cb{0}\" runat=\"server\" CssClass=\"ComboBox\">{1}</dx:ASPxComboBox>", dc.ColumnName, Environment.NewLine);
-                                    entidadTemporal = string.Format("if (cb{0}.Value != null){1}{2}.{0} = ({3})cb{0}.Value;{1}", dc.ColumnName, Environment.NewLine, NombreTabla.Substring(2), dc.DataType.Name);
+                                    entidadTemporal = string.Format("if (cb{0}.Value != null){1}{2}.{0} = Convert.To{3}(cb{0}.Value);{1}", dc.ColumnName, Environment.NewLine, NombreTabla.Substring(2), dc.DataType.Name);
                                 }
 
-                                propiedades += string.Format("<dx:LayoutItem Caption=\"{0}\">{1}", dc.ColumnName, Environment.NewLine);
+                                if (dc.ColumnName.Substring(0, 2) == "id") // llenar combos
+                                {
+                                    entidadCombo += string.Format("cbid{0}.DataSource = fachadaCore.consultarDatos{0}(sql);{1}", dc.ColumnName.Substring(2), Environment.NewLine);
+                                    entidadCombo += string.Format("cbid{0}.ValueField = \"Id\";{1}", dc.ColumnName.Substring(2), Environment.NewLine);
+                                    entidadCombo += string.Format("cbid{0}.TextField = \"Nombre\";{1}", dc.ColumnName.Substring(2), Environment.NewLine);
+                                    entidadCombo += string.Format("cbid{0}.DataBind();{1}", dc.ColumnName.Substring(2), Environment.NewLine);
+                                }
+
+                                propiedades += string.Format("<dx:LayoutItem Caption=\"{0}\" FieldName=\"{0}\">{1}", dc.ColumnName, Environment.NewLine);
                                 propiedades += string.Format("<LayoutItemNestedControlCollection>{0}", Environment.NewLine);
                                 propiedades += string.Format("<dx:LayoutItemNestedControlContainer runat=\"server\">{0}", Environment.NewLine);
                                 propiedades += componente;
@@ -298,13 +305,14 @@ namespace AutoGenerador
                         #endregion
 
                         #region Codigo
-                        reader = new System.IO.StreamReader("estructuras\\ctrASCX_Codigo.txt");
+                        reader = new System.IO.StreamReader("estructuras\\ctrForm_Codigo.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
                         reader.Close();
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         archivo.Replace("[ENTIDAD]", entidad);
+                        archivo.Replace("[ENTIDADCOMBO]", entidadCombo);
 
                         writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}Form.ascx.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());
@@ -312,7 +320,7 @@ namespace AutoGenerador
                         #endregion
 
                         #region Diseño
-                        reader = new System.IO.StreamReader("estructuras\\ctrASCX_Diseno.txt");
+                        reader = new System.IO.StreamReader("estructuras\\ctrForm_Diseno.txt");
                         archivo = new StringBuilder(reader.ReadToEnd());
                         reader.Close();
 
@@ -324,6 +332,182 @@ namespace AutoGenerador
                         writer.Close();
                         #endregion
 
+                    }
+
+                    if (checkEdit6.Checked) //controles list
+                    {
+                        propiedades = "";
+                        entidad = "";
+
+                        #region Pagina
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\ctrList_Pagina.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        DataTable datCampos = cargarEsquemaTabla(NombreTabla);
+                        if (datCampos != null)
+                        {
+                            foreach (DataColumn dc in datCampos.Columns)
+                            {
+                                string componente = string.Format("<dx:GridViewDataTextColumn FieldName=\"{0}\" Caption=\"{0}\">{1}</dx:GridViewDataTextColumn>", dc.ColumnName, Environment.NewLine);
+
+                                if (dc.DataType.Name.IndexOf("Boolean") >= 0)
+                                {
+                                    componente = string.Format("<dx:GridViewDataCheckColumn Caption=\"{0}\" FieldName=\"{0}\" UnboundType=\"Boolean\">{1}</dx:GridViewDataCheckColumn>", dc.ColumnName, Environment.NewLine);
+                                }
+                                propiedades += componente + Environment.NewLine;
+                            }
+                        }
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}List.ascx", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Codigo
+                        reader = new System.IO.StreamReader("estructuras\\ctrList_Codigo.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}List.ascx.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Diseño
+                        reader = new System.IO.StreamReader("estructuras\\ctrList_Diseno.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}ctr{2}List.ascx.designer.cs", buttonEdit1.Text, "Controles\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                    }
+                    #endregion
+
+                    #region Formularios
+                    if (checkEdit7.Checked) //List 
+                    {
+                        propiedades = "";
+                        metodos = "";
+
+                        #region Pagina
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\frm_Pagina.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        propiedades = string.Format("<dx:ASPxButton ID=\"btCrear\" runat=\"server\" Text= \"Nuevo\" OnClick=\"btCrear_Click\"></dx:ASPxButton>{0}", Environment.NewLine);
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "List");
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}List.aspx", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Diseño
+                        reader = new System.IO.StreamReader("estructuras\\frm_Diseno.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "List");
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}List.aspx.designer.cs", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Codigo
+                        reader = new System.IO.StreamReader("estructuras\\frm_Codigo.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        metodos += "protected void btCrear_Click(object sender, EventArgs e)" + Environment.NewLine;
+                        metodos += "{";
+                        metodos += string.Format("{0}Response.Redirect(\"frm{1}Form.aspx\");{0}", Environment.NewLine, NombreTabla.Substring(2));
+                        metodos += "}" + Environment.NewLine;
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "List");
+                        archivo.Replace("[METODOS]", metodos);
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}List.aspx.cs", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+                    }
+
+                    if (checkEdit8.Checked) //Form 
+                    {
+                        propiedades = "";
+                        metodos = "";
+
+                        #region Pagina
+                        System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\frm_Pagina.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        string NombreTabla = dr[2].ToString();
+                        propiedades = "";
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "Form");
+                        archivo.Replace("[PROPIEDADES]", propiedades);
+
+                        System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}Form.aspx", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Diseño
+                        reader = new System.IO.StreamReader("estructuras\\frm_Diseno.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "Form");
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}Form.aspx.designer.cs", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
+
+                        #region Codigo
+                        reader = new System.IO.StreamReader("estructuras\\frm_Codigo.txt");
+                        archivo = new StringBuilder(reader.ReadToEnd());
+                        reader.Close();
+
+                        archivo.Replace("[TABLE]", NombreTabla.Substring(2));
+                        archivo.Replace("[NAMESPACE]", textEdit1.Text);
+                        archivo.Replace("[TIPO]", "Form");
+                        archivo.Replace("[METODOS]", metodos);
+
+                        writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}Form.aspx.cs", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
+                        writer.Write(archivo.ToString());
+                        writer.Close();
+                        #endregion
                     }
                     #endregion
                 }

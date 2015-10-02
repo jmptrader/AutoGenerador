@@ -38,6 +38,9 @@
             this.textEdit1 = new DevExpress.XtraEditors.TextEdit();
             this.labelControl2 = new DevExpress.XtraEditors.LabelControl();
             this.checkEdit5 = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEdit6 = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEdit7 = new DevExpress.XtraEditors.CheckEdit();
+            this.checkEdit8 = new DevExpress.XtraEditors.CheckEdit();
             ((System.ComponentModel.ISupportInitialize)(this.buttonEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit2.Properties)).BeginInit();
@@ -45,6 +48,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit4.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit5.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit6.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit7.Properties)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit8.Properties)).BeginInit();
             this.SuspendLayout();
             // 
             // labelControl1
@@ -99,7 +105,7 @@
             // 
             // simpleButton1
             // 
-            this.simpleButton1.Location = new System.Drawing.Point(387, 166);
+            this.simpleButton1.Location = new System.Drawing.Point(387, 253);
             this.simpleButton1.Name = "simpleButton1";
             this.simpleButton1.Size = new System.Drawing.Size(75, 23);
             this.simpleButton1.TabIndex = 7;
@@ -129,11 +135,38 @@
             this.checkEdit5.Size = new System.Drawing.Size(75, 19);
             this.checkEdit5.TabIndex = 10;
             // 
+            // checkEdit6
+            // 
+            this.checkEdit6.Location = new System.Drawing.Point(12, 193);
+            this.checkEdit6.Name = "checkEdit6";
+            this.checkEdit6.Properties.Caption = "Diseño List";
+            this.checkEdit6.Size = new System.Drawing.Size(75, 19);
+            this.checkEdit6.TabIndex = 11;
+            // 
+            // checkEdit7
+            // 
+            this.checkEdit7.Location = new System.Drawing.Point(12, 222);
+            this.checkEdit7.Name = "checkEdit7";
+            this.checkEdit7.Properties.Caption = "frmList";
+            this.checkEdit7.Size = new System.Drawing.Size(75, 19);
+            this.checkEdit7.TabIndex = 12;
+            // 
+            // checkEdit8
+            // 
+            this.checkEdit8.Location = new System.Drawing.Point(12, 250);
+            this.checkEdit8.Name = "checkEdit8";
+            this.checkEdit8.Properties.Caption = "frmForm";
+            this.checkEdit8.Size = new System.Drawing.Size(75, 19);
+            this.checkEdit8.TabIndex = 13;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(474, 197);
+            this.ClientSize = new System.Drawing.Size(474, 286);
+            this.Controls.Add(this.checkEdit8);
+            this.Controls.Add(this.checkEdit7);
+            this.Controls.Add(this.checkEdit6);
             this.Controls.Add(this.checkEdit5);
             this.Controls.Add(this.labelControl2);
             this.Controls.Add(this.textEdit1);
@@ -153,6 +186,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit4.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.textEdit1.Properties)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.checkEdit5.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit6.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit7.Properties)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.checkEdit8.Properties)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -170,6 +206,9 @@
         private DevExpress.XtraEditors.TextEdit textEdit1;
         private DevExpress.XtraEditors.LabelControl labelControl2;
         private DevExpress.XtraEditors.CheckEdit checkEdit5;
+        private DevExpress.XtraEditors.CheckEdit checkEdit6;
+        private DevExpress.XtraEditors.CheckEdit checkEdit7;
+        private DevExpress.XtraEditors.CheckEdit checkEdit8;
 
     }
 }

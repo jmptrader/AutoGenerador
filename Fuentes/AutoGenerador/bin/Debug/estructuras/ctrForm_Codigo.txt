@@ -1,0 +1,111 @@
+using BaseDatos;
+using DevExpress.Web;
+using [NAMESPACE];
+using System;
+using System.Collections.Generic;
+using System.Data;
+
+namespace SAFWeb.[NAMESPACE].Controles
+{
+    public partial class ctr[TABLE]Form : System.Web.UI.UserControl
+    {
+        #region Propiedades
+        public long Id[TABLE]
+        {
+            get
+            {
+                long valor = 0;
+                long.TryParse(lbId.Text, out valor);
+                return valor;
+            }
+
+            set
+            {
+                lbId.Text = value.ToString();
+            }
+        }
+
+        const string nombreForm = "[TABLE]Form";
+        #endregion
+
+        #region eventos
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                Session["Datos" + nombreForm] = null;
+                obtenerQueryString();
+                flDatos.DataBind();
+            }
+        }
+
+        protected void btGuardar_Click(object sender, EventArgs e)
+        {
+            registarDatos();
+        }
+
+        protected void flDatos_DataBinding(object sender, EventArgs e)
+        {
+            ASPxFormLayout form = sender as ASPxFormLayout;
+            if (Session["Datos" + nombreForm] == null)
+                form.DataSource = obtenerDatos();
+            else
+                form.DataSource = Session["Datos" + nombreForm];
+        }
+        #endregion
+
+        #region Metodos
+        private void obtenerQueryString()
+        {
+            long valor = 0;
+            if (long.TryParse(Request["Id[TABLE]"], out valor))
+                Id[TABLE] = valor;
+        }
+
+        private DataTable obtenerDatos()
+        {
+            var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
+            var fachadaCore = new clsFachada[NAMESPACE](ref ejecutor);
+
+            SentenciaSQL sql = new SentenciaSQL();
+            sql.FiltroBD.Add(new FiltroBD(cls[TABLE].Campos.Id, Id[TABLE], FiltroBD.OperadorLogico.igual));            
+
+            DataTable datos = fachadaCore.consultarDatos[TABLE](sql);
+            Session["Datos" + nombreForm] = datos;
+            return datos;
+        }
+
+        private void registarDatos()
+        {
+            cls[TABLE] [TABLE] = new cls[TABLE]();
+            [ENTIDAD]
+
+            var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
+            var fachadaCore = new clsFachada[NAMESPACE](ref ejecutor);
+
+            int resultado = 0;
+            if (Id[TABLE] == 0)
+            {
+                resultado = fachadaCore.insertar[TABLE]([TABLE]);
+                lbId.Text = resultado.ToString();
+            }
+            else
+            {
+                SentenciaSQL sql = new SentenciaSQL();
+                sql.FiltroBD.Add(new FiltroBD(cls[TABLE].Campos.Id, Id[TABLE], FiltroBD.OperadorLogico.igual));
+                resultado = fachadaCore.editar[TABLE]([TABLE], sql);
+            }
+        }
+
+		private void cargarCombos()
+        {
+            var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
+            var fachadaCore = new clsFachada[NAMESPACE](ref ejecutor);
+            
+            SentenciaSQL sql = new SentenciaSQL();
+
+            [ENTIDADCOMBO]
+        }
+        #endregion
+    }
+}

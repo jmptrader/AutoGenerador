@@ -1,0 +1,27 @@
+<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="frm[TABLE][TIPO].aspx.cs" Inherits="SAFWeb.[NAMESPACE].frm[TABLE][TIPO]" %>
+
+<%@ Register Src="~/[NAMESPACE]/Controles/ctr[TABLE][TIPO].ascx" TagPrefix="uc1" TagName="ctr[TABLE][TIPO]" %>
+
+<!DOCTYPE html>
+<link href="../css/EstilosApp.css" rel="stylesheet" />
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
+</head>
+<body>
+    <form id="form1" runat="server">
+		<div>
+            <div class="botonesList">
+                <div class="tablaFilaEnc">
+                </div>
+                <div>
+                    [PROPIEDADES]
+                </div>
+                <div class="tablaFilaPie">
+                </div>
+            </div>
+            <uc1:ctr[TABLE][TIPO] runat="server" id="ctr[TABLE][TIPO]" />
+        </div>
+    </form>
+</body>
+</html>

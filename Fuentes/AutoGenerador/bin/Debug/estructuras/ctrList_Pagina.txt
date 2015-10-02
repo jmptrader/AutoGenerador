@@ -1,0 +1,21 @@
+<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="ctr[TABLE]List.ascx.cs" Inherits="SAFWeb.[NAMESPACE].Controles.ctr[TABLE]List" %>
+<div class="grillasForm">
+    <dx:ASPxGridView ID="gvDatos" ClientInstanceName="gvDatos" runat="server" AutoGenerateColumns="False" OnDataBinding="gvDatos_DataBinding" Width="100%"
+        KeyFieldName="Id">
+        <Columns>
+            <dx:GridViewDataTextColumn Caption="" Width="15%" ReadOnly="true">
+                <DataItemTemplate>
+                    <a id="hrefEditar" href="Frm[TABLE]Form.aspx?Id[TABLE]=<%# Container.KeyValue %>">Editar</a>
+                </DataItemTemplate>
+            </dx:GridViewDataTextColumn>
+            [PROPIEDADES]
+        </Columns>
+        <SettingsPager AlwaysShowPager="True" PageSize="20">
+        </SettingsPager>
+        <Styles>
+            <AlternatingRow Enabled="True">
+            </AlternatingRow>
+        </Styles>
+        <Border BorderStyle="None"></Border>
+    </dx:ASPxGridView>
+</div>

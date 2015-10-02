@@ -1,0 +1,49 @@
+using BaseDatos;
+using DevExpress.Web;
+using [NAMESPACE];
+using System;
+using System.Collections.Generic;
+using System.Data;
+
+namespace SAFWeb.[NAMESPACE].Controles
+{
+    public partial class ctr[TABLE]List : System.Web.UI.UserControl
+    {
+        #region Propiedades
+        const string nombreForm = "[TABLE]List";
+        #endregion
+
+        #region eventos
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            if (!IsPostBack)
+            {
+                Session["Datos" + nombreForm] = null;
+                gvDatos.DataBind();
+            }
+        }
+
+        protected void gvDatos_DataBinding(object sender, EventArgs e)
+        {
+            ASPxGridView grid = sender as ASPxGridView;
+            if (Session["Datos" + nombreForm] == null)
+                grid.DataSource = obtenerDatos();
+            else
+                grid.DataSource = Session["Datos" + nombreForm];
+        }
+        #endregion
+
+        #region metodos
+        private DataTable obtenerDatos()
+        {
+            var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
+            var fachadaSeg = new clsFachada[NAMESPACE](ref ejecutor);
+
+            SentenciaSQL sql = new SentenciaSQL();
+            DataTable datos = fachadaSeg.consultarDatos[TABLE](sql);
+            Session["Datos" + nombreForm] = datos;
+            return datos;
+        }
+        #endregion
+    }
+}
