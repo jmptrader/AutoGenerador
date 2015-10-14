@@ -68,7 +68,7 @@ namespace [NAMESPACE] {
 
         private string construirUpdate(object obj)
         {
-            string Insert = "";
+            string Update = "";
             if (obj != null)
             {
                 string update = "";
@@ -86,9 +86,15 @@ namespace [NAMESPACE] {
                     }
                 }
 
-                Insert += string.Format("Update bd[TABLE] SET {0}", update.Substring(1));
+                Update = string.Format("Update bd[TABLE] SET {0}", update.Substring(1));
             }
-            return Insert;
+            return Update;
+        }
+
+		private string construirDelete()
+        {
+            const string Delete = "Delete bd[TABLE] ";
+            return Delete;
         }
 
         private string CondicionSQL(SentenciaSQL sql)
