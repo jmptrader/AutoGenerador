@@ -171,6 +171,8 @@ namespace [NAMESPACE] {
         {
             int resultado=0;
 			EjecutorBaseDatos.limpiarParametros();
+            string sentenciaSQL = construirDelete() + CondicionSQL(sql);
+            resultado = EjecutorBaseDatos.ejecutarSentencia(sentenciaSQL);
 			return resultado;
         }
 
