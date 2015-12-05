@@ -132,7 +132,7 @@
             this.checkEdit5.Location = new System.Drawing.Point(12, 168);
             this.checkEdit5.Name = "checkEdit5";
             this.checkEdit5.Properties.Caption = "Diseño Form";
-            this.checkEdit5.Size = new System.Drawing.Size(75, 19);
+            this.checkEdit5.Size = new System.Drawing.Size(91, 19);
             this.checkEdit5.TabIndex = 10;
             // 
             // checkEdit6

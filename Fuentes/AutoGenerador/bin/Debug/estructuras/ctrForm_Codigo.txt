@@ -35,6 +35,7 @@ namespace SAFWeb.[NAMESPACE].Controles
             {
                 Session["Datos" + nombreForm] = null;
                 obtenerQueryString();
+				cargarCombos();
                 flDatos.DataBind();
             }
         }
@@ -75,13 +76,13 @@ namespace SAFWeb.[NAMESPACE].Controles
             return datos;
         }
 
-        private void registarDatos()
+        public void registarDatos()
         {
-            cls[TABLE] [TABLE] = new cls[TABLE]();
-            [ENTIDAD]
-
-            var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
+			var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
             var fachadaCore = new clsFachada[NAMESPACE](ref ejecutor);
+
+			cls[TABLE] [TABLE] = new cls[TABLE]();
+            [ENTIDAD]
 
             int resultado = 0;
             if (Id[TABLE] == 0)
@@ -102,8 +103,7 @@ namespace SAFWeb.[NAMESPACE].Controles
             var ejecutor = (Comandos)Session["ejecutorBD[NAMESPACE]"];
             var fachadaCore = new clsFachada[NAMESPACE](ref ejecutor);
             
-            SentenciaSQL sql = new SentenciaSQL();
-
+            SentenciaSQL sql = new SentenciaSQL();			
             [ENTIDADCOMBO]
         }
         #endregion

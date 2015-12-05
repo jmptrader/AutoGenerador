@@ -19,6 +19,7 @@ namespace SAFWeb.[NAMESPACE].Controles
             if (!IsPostBack)
             {
                 Session["Datos" + nombreForm] = null;
+				gvDatos.SettingsSearchPanel.CustomEditorID = "txtBuscar";
                 gvDatos.DataBind();
             }
         }

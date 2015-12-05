@@ -4,6 +4,7 @@
 
 <!DOCTYPE html>
 <link href="../css/EstilosApp.css" rel="stylesheet" />
+<script src="../js/Funciones.js"></script>
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
@@ -16,15 +17,15 @@
                     <td>
                         <dx:ASPxLabel ID="lbTitulo" CssClass="TituloList" runat="server" Text="[TABLE]"></dx:ASPxLabel>
                     </td>
-                    <td>&nbsp;</td>
+                    <td class="CeldaCentralEncabezado">&nbsp;</td>
                     <td>&nbsp;</td>
                 </tr>
                 <tr class="filaEncabezado">
                     <td>
-						[PROPIEDADES]
+					[PROPIEDADES]
 					</td>
-                    <td>&nbsp;</td>
-                    <td>&nbsp;</td>
+                    <td class="CeldaCentralEncabezado">&nbsp;</td>
+                    <td>[PROPIEDADES2]</td>
                 </tr>
             </table>
         </div>

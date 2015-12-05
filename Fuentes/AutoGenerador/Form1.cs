@@ -94,14 +94,16 @@ namespace AutoGenerador
                                 nulo = "";
                                 if (dc.DataType.Name.IndexOf("Int") >= 0 || dc.DataType.Name.IndexOf("Byte") >= 0)
                                     nulo = "?";
-                                propiedades += string.Format("private {0}{3} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine, nulo);
+                                //propiedades += string.Format("private {0}{3} m_{1};{2}", dc.DataType.Name, dc.ColumnName.ToLower(), Environment.NewLine, nulo);
+                                propiedades += string.Format("public {0}{3} {1};{2}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, nulo);
                                 metodos += string.Format("public {0}{6} {1} {{ {2} get {{return m_{3};}} {4} set {{m_{5} = value;}} }}", dc.DataType.Name, dc.ColumnName, Environment.NewLine, dc.ColumnName.ToLower(), Environment.NewLine, dc.ColumnName.ToLower(), nulo);
                                 enumCampos += string.Format("{0},", dc.ColumnName);
                             }
                         }
 
                         archivo.Replace("[PROPIEDADES]", propiedades);
-                        archivo.Replace("[METODOS]", metodos);
+                        //archivo.Replace("[METODOS]", metodos);
+                        archivo.Replace("[METODOS]", "");
                         archivo.Replace("[ENUMCAMPOS]", enumCampos);
 
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}cls{2}.cs", buttonEdit1.Text, "Entidades\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
@@ -273,12 +275,23 @@ namespace AutoGenerador
 
                                 if (dc.ColumnName.Substring(0, 2) == "id" || dc.ColumnName == "Estado")
                                 {
-                                    componente = string.Format("<dx:ASPxComboBox ID=\"cb{0}\" runat=\"server\" CssClass=\"ComboBox\">{1}</dx:ASPxComboBox>", dc.ColumnName, Environment.NewLine);
-                                    entidadTemporal = string.Format("if (cb{0}.Value != null){1}{2}.{0} = Convert.To{3}(cb{0}.Value);{1}", dc.ColumnName, Environment.NewLine, NombreTabla.Substring(2), dc.DataType.Name);
+                                    componente = string.Format("<dx:ASPxComboBox ID=\"cb{0}\" runat=\"server\" CssClass=\"ComboBox\" DropDownStyle=\"DropDown\" IncrementalFilteringMode=\"StartsWith\">{1}</dx:ASPxComboBox>", dc.ColumnName, Environment.NewLine);
+                                    entidadTemporal = string.Format("if (cb{0}.SelectedItem != null){1}{2}.{0} = Convert.To{3}(cb{0}.Value);{1}", dc.ColumnName, Environment.NewLine, NombreTabla.Substring(2), dc.DataType.Name);
+
+                                    if (dc.ColumnName.Substring(0, 2) == "id")
+                                    {
+                                        entidadTemporal += string.Format("else{0} {{ {0} if(cb{1}.Text != string.Empty) {0} {{ {0}", Environment.NewLine, dc.ColumnName);
+                                        entidadTemporal += string.Format("cls{1} {1} = new cls{1}();{0}", Environment.NewLine, dc.ColumnName.Substring(2));
+                                        entidadTemporal += string.Format("{1}.Nombre = cb{2}.Text;{0}", Environment.NewLine, dc.ColumnName.Substring(2), dc.ColumnName);
+                                        entidadTemporal += string.Format("{1}.Activo = true;{0}", Environment.NewLine, dc.ColumnName.Substring(2));
+                                        entidadTemporal += string.Format("{2}.id{1} = (short)fachadaCore.insertar{1}({1}); {0} }} {0} }} {0}", Environment.NewLine, dc.ColumnName.Substring(2), NombreTabla.Substring(2));
+                                    }
+
                                 }
 
                                 if (dc.ColumnName.Substring(0, 2) == "id") // llenar combos
                                 {
+                                    entidadCombo += string.Format("sql.FiltroBD.Add(new FiltroBD(cls{0}.Campos.Activo, true, FiltroBD.OperadorLogico.igual));{1}", dc.ColumnName.Substring(2), Environment.NewLine);
                                     entidadCombo += string.Format("cbid{0}.DataSource = fachadaCore.consultarDatos{0}(sql);{1}", dc.ColumnName.Substring(2), Environment.NewLine);
                                     entidadCombo += string.Format("cbid{0}.ValueField = \"Id\";{1}", dc.ColumnName.Substring(2), Environment.NewLine);
                                     entidadCombo += string.Format("cbid{0}.TextField = \"Nombre\";{1}", dc.ColumnName.Substring(2), Environment.NewLine);
@@ -411,11 +424,11 @@ namespace AutoGenerador
 
                         string NombreTabla = dr[2].ToString();
                         propiedades = string.Format("<dx:ASPxButton ID=\"btCrear\" runat=\"server\" Text= \"Nuevo\" OnClick=\"btCrear_Click\"></dx:ASPxButton>{0}", Environment.NewLine);
-
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         archivo.Replace("[TIPO]", "List");
                         archivo.Replace("[PROPIEDADES]", propiedades);
+                        archivo.Replace("[PROPIEDADES2]", string.Format("<dx:ASPxTextBox ID=\"txtBuscar\" runat=\"server\" Width=\"300px\"></dx:ASPxTextBox>{0}", Environment.NewLine));
 
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}List.aspx", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());
@@ -460,7 +473,6 @@ namespace AutoGenerador
                     if (checkEdit8.Checked) //Form 
                     {
                         propiedades = "";
-                        metodos = "";
 
                         #region Pagina
                         System.IO.StreamReader reader = new System.IO.StreamReader("estructuras\\frm_Pagina.txt");
@@ -468,13 +480,16 @@ namespace AutoGenerador
                         reader.Close();
 
                         string NombreTabla = dr[2].ToString();
-                        propiedades = "";
+                        propiedades = "<dx:ASPxButton ID=\"btGuardar\" runat=\"server\" Text=\"Guardar\" Width=\"100\" OnClick=\"btGuardar_Click\" />" + Environment.NewLine;
+
+                        metodos = string.Format("protected void btGuardar_Click(object sender, EventArgs e){0}", Environment.NewLine);
+                        metodos += string.Format("{{ {0}ctr{1}Form.registarDatos();{0} }}", Environment.NewLine, NombreTabla.Substring(2));
 
                         archivo.Replace("[TABLE]", NombreTabla.Substring(2));
                         archivo.Replace("[NAMESPACE]", textEdit1.Text);
                         archivo.Replace("[TIPO]", "Form");
                         archivo.Replace("[PROPIEDADES]", propiedades);
-
+                        archivo.Replace("[PROPIEDADES2]", "&nbsp;");
                         System.IO.StreamWriter writer = new System.IO.StreamWriter(string.Format("{0}{1}frm{2}Form.aspx", buttonEdit1.Text, "Paginas\\", NombreTabla.Substring(2)), false, Encoding.Unicode);
                         writer.Write(archivo.ToString());
                         writer.Close();
